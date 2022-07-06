@@ -28,5 +28,3 @@ npm run dev
 npm run build
 ```
 
-
-Book store API
