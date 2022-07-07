@@ -12,6 +12,7 @@
     "vue-router": "^4.0.16"
   },
   "devDependencies": {
+    "@iconify/vue": "^3.2.1",
     "@vitejs/plugin-vue": "^2.3.3",
     "vite": "^2.9.12"
   }
