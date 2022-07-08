@@ -7,6 +7,7 @@
   --color-accent: #ea1f81;
   --color-font: #40403f;
 
+  --padding-panel: 1rem 2rem;
   --shadow: 0 0 10px 2px hsla(0, 0%, 50%, 0.7);
 }
 
