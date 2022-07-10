@@ -35,13 +35,21 @@
 
         <!-- MAIN -->
 
+        <main class="main-panel">
+            <MainTab></MainTab>
+        </main>
+
         <!-- FOOTER -->
+        <footer class="footer-panel">
+            <h2>Footer</h2>
+        </footer>
     </div>
 </template>
 
 <script setup>
 import SearchButton from "../components/SearchButton.vue";
 import NavigationButton from "../components/NavigationButton.vue";
+import MainTab from "../components/MainTab.vue";
 </script>
 
 <style scoped>
@@ -52,14 +60,14 @@ import NavigationButton from "../components/NavigationButton.vue";
     display: grid;
     grid-template-columns: minmax(20rem, 22vw) 1fr;
     grid-template-rows: auto 1fr auto;
-    /* grid-template-areas:
-  "header header"
-  "aside main""
-  "footer footer"; */
+    grid-template-areas:
+        "header header"
+        "aside main"
+        "footer footer";
 }
 
 .header-panel {
-    grid-column: 1 / 3;
+    grid-area: header;
 
     width: 100%;
     padding: var(--padding-panel);
@@ -90,6 +98,7 @@ input {
 }
 
 .aside-panel {
+    grid: aside;
     margin: 1.5rem 0;
 
     border-right: 1px solid var(--color-primary);
@@ -100,5 +109,13 @@ input {
 
 .aside-panel__search {
     padding: var(--padding-panel);
+}
+
+.main-panel {
+    grid-area: main;
+}
+
+.footer-panel {
+    grid-area: footer;
 }
 </style>
