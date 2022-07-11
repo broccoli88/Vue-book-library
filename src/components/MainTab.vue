@@ -1,20 +1,32 @@
 <template>
     <div class="main-tab">
-        <p class="title">Ja, Inkwizytor</p>
-        <p class="author">Author: Jacek Piekara</p>
-        <p class="release">Release: 1988</p>
+        <figure class="cover">
+            <img :src="bookInfo.imageLinks.smallThumbnail" alt="" />
+        </figure>
+        <p class="title">{{ bookInfo.title }}</p>
+        <p class="author">{{ bookInfo.authors[0] }}</p>
+        <p class="publisher">{{ bookInfo.publisher }}</p>
+        <p class="release">Released: {{ bookInfo.publishedDate }}</p>
 
         <p class="description">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempora in
-            perferendis eius voluptatem consequuntur itaque assumenda quidem
-            libero dolor commodi corrupti nemo, debitis veritatis voluptas!
-            Doloribus illo assumenda sequi quisquam.
+            {{ bookInfo.description }}
         </p>
 
-        <p class="price">15$</p>
+        <p class="price">
+            {{ bookPriceInfo.retailPrice.amount }}
+            {{ bookPriceInfo.retailPrice.currencyCode }}
+        </p>
     </div>
 </template>
-<script setup></script>
+<script setup>
+import { reactive } from "vue";
+
+const props = defineProps(["book"]);
+const bookInfo = reactive(props.book.volumeInfo);
+const bookPriceInfo = reactive(props.book.saleInfo);
+
+console.log(bookInfo);
+</script>
 <style scoped>
 .main-tab {
     width: 100%;
@@ -22,13 +34,13 @@
     padding: var(--padding-panel);
 
     display: grid;
-    grid-template-columns: repeat(2, auto);
+    grid-template-columns: repeat(3, auto);
     grid-template-rows: auto;
     grid-template-areas:
-        "title title "
-        "author release"
-        "description description"
-        ". price";
+        "cover title title "
+        "author publisher release"
+        "description description description"
+        ". . price";
 
     position: relative;
 }
@@ -49,6 +61,10 @@
     padding: 1rem 0;
 }
 
+.cover {
+    grid-area: cover;
+}
+
 .title {
     grid-area: title;
 
@@ -57,13 +73,20 @@
 }
 
 .author,
-.release {
+.release,
+.publisher {
     font-size: 1.8rem;
     font-weight: 600;
+
+    justify-self: start;
 }
 
 .author {
     grid-area: author;
+}
+
+.publisher {
+    grid-area: publisher;
 }
 
 .release {

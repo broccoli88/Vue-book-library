@@ -5,8 +5,8 @@
         <header class="header-panel flex">
             <span class="header-panel__brand">BOOKS</span>
             <div class="header-panel__search flex">
-                <input type="text" />
-                <SearchButton />
+                <input v-model="bookSearch" type="text" />
+                <SearchButton @search="searchBook" />
             </div>
         </header>
 
@@ -36,7 +36,11 @@
         <!-- MAIN -->
 
         <main class="main-panel">
-            <MainTab></MainTab>
+            <MainTab
+                :book="book"
+                v-for="book in bookSearchList"
+                :key="book.id"
+            ></MainTab>
         </main>
 
         <!-- FOOTER -->
@@ -50,6 +54,25 @@
 import SearchButton from "../components/SearchButton.vue";
 import NavigationButton from "../components/NavigationButton.vue";
 import MainTab from "../components/MainTab.vue";
+import { reactive, ref } from "vue";
+
+// API
+const bookSearchList = reactive([]);
+const bookSearch = ref("");
+const getData = async () => {
+    const response = await fetch(
+        `https://www.googleapis.com/books/v1/volumes?q=${bookSearch.value}`
+    );
+    const data = await response.json();
+    data.items.forEach((item) => {
+        bookSearchList.push(item);
+        // console.log(item);
+    });
+};
+
+const searchBook = () => {
+    getData();
+};
 </script>
 
 <style scoped>
