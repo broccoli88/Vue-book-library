@@ -60,13 +60,16 @@ import { reactive, ref } from "vue";
 const bookSearchList = reactive([]);
 const bookSearch = ref("");
 const getData = async () => {
+    if (bookSearchList.length > 0) {
+        bookSearchList.splice(0, bookSearchList.length);
+    }
+
     const response = await fetch(
         `https://www.googleapis.com/books/v1/volumes?q=${bookSearch.value}`
     );
     const data = await response.json();
     data.items.forEach((item) => {
         bookSearchList.push(item);
-        // console.log(item);
     });
 };
 

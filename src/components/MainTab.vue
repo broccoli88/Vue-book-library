@@ -24,8 +24,6 @@ import { reactive } from "vue";
 const props = defineProps(["book"]);
 const bookInfo = reactive(props.book.volumeInfo);
 const bookPriceInfo = reactive(props.book.saleInfo);
-
-console.log(bookInfo);
 </script>
 <style scoped>
 .main-tab {
