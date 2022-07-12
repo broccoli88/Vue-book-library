@@ -45,7 +45,9 @@
 
         <!-- FOOTER -->
         <footer class="footer-panel">
-            <h2>Footer</h2>
+            <a href="https://developers.google.com/books"
+                >Google Book Store API</a
+            >
         </footer>
     </div>
 </template>
@@ -54,7 +56,7 @@
 import SearchButton from "../components/SearchButton.vue";
 import NavigationButton from "../components/NavigationButton.vue";
 import MainTab from "../components/MainTab.vue";
-import { reactive, ref } from "vue";
+import { computed, reactive, ref } from "vue";
 
 // API
 const bookSearchList = reactive([]);
@@ -65,7 +67,7 @@ const getData = async () => {
     }
 
     const response = await fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=${bookSearch.value}`
+        `https://www.googleapis.com/books/v1/volumes?q=intitle:${bookSearch.value}`
     );
     const data = await response.json();
     data.items.forEach((item) => {
@@ -143,5 +145,14 @@ input {
 
 .footer-panel {
     grid-area: footer;
+
+    padding: 1rem 0;
+    background-color: var(--color-primary);
+
+    text-align: center;
+}
+
+.footer-panel > a {
+    color: white;
 }
 </style>
