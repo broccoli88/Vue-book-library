@@ -24,10 +24,12 @@ const searchTerm = () => {
 <style scoped>
 .search-button button {
     height: 100%;
-    padding: 0 1rem;
+    padding: 0 3rem;
 
     background-color: var(--color-primary);
     border: 0;
+
+    cursor: pointer;
 }
 
 .search-button button:active {

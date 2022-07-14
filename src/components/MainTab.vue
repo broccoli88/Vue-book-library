@@ -1,35 +1,42 @@
 <template>
     <div class="main-tab">
-        <figure class="cover">
+        <figure v-if="bookInfo.imageLinks" class="cover">
             <img :src="bookInfo.imageLinks.smallThumbnail" alt="" />
         </figure>
-        <p class="title">{{ bookInfo.title }}</p>
-        <p class="author">{{ bookInfo.authors[0] }}</p>
-        <p class="publisher">{{ bookInfo.publisher }}</p>
+        <p class="title" v-if="bookInfo.title">{{ bookInfo.title }}</p>
+        <p class="author" v-if="bookInfo.authors">
+            {{ bookInfo.authors[0] }}
+        </p>
+        <p class="publisher" v-if="bookInfo.publisher">
+            {{ bookInfo.publisher }}
+        </p>
         <p class="release">Released: {{ bookInfo.publishedDate }}</p>
 
-        <p class="description">
-            {{ bookInfo.description }}
+        <p class="description" v-if="bookInfo.description">
+            {{ bookDescription }} ...
         </p>
 
-        <p class="price">
-            {{ bookPriceInfo.retailPrice.amount }}
-            {{ bookPriceInfo.retailPrice.currencyCode }}
-        </p>
+        <button class="details">Details</button>
     </div>
 </template>
 <script setup>
+import { computed } from "@vue/reactivity";
 import { reactive } from "vue";
 
 const props = defineProps(["book"]);
 const bookInfo = reactive(props.book.volumeInfo);
 const bookPriceInfo = reactive(props.book.saleInfo);
+
+const bookDescription = computed(() => {
+    if (!bookInfo.description) return;
+    return bookInfo.description.substring(0, 455);
+});
 </script>
 <style scoped>
 .main-tab {
     width: 100%;
 
-    padding: var(--padding-panel);
+    padding: 3rem 2rem;
 
     display: grid;
     grid-template-columns: repeat(3, auto);
@@ -38,7 +45,7 @@ const bookPriceInfo = reactive(props.book.saleInfo);
         "cover title title "
         "author publisher release"
         "description description description"
-        ". . price";
+        ". . details";
 
     position: relative;
 }
@@ -95,11 +102,17 @@ const bookPriceInfo = reactive(props.book.saleInfo);
     grid-area: description;
 }
 
-.price {
-    grid-area: price;
+.details {
+    grid-area: details;
 
-    font-size: 3rem;
+    margin: 2rem 0;
+    background-color: transparent;
+    border: 0;
+
+    font-size: 2rem;
     font-weight: 600;
+
+    cursor: pointer;
 
     justify-self: end;
 }

@@ -5,18 +5,22 @@
         <header class="header-panel flex">
             <span class="header-panel__brand">BOOKS</span>
             <div class="header-panel__search flex">
-                <input v-model="bookSearch" type="text" />
-                <SearchButton @search="searchBook" />
+                <input v-model="bookSearch" type="text" placeholder="title" />
+                <!-- <SearchButton @search="searchBook" /> -->
             </div>
+            <div class="header-panel__search flex">
+                <input
+                    v-model="authorSearch"
+                    type="text"
+                    placeholder="author"
+                />
+            </div>
+            <SearchButton @search="searchBook" />
         </header>
 
         <!-- ASIDE -->
 
         <aside class="aside-panel flex-column">
-            <div class="aside-panel__search flex">
-                <input type="text" />
-                <SearchButton />
-            </div>
             <div class="aside-panel__navigation flex-column">
                 <NavigationButton>
                     <template v-slot="favorites"> favorites </template>
@@ -56,19 +60,34 @@
 import SearchButton from "../components/SearchButton.vue";
 import NavigationButton from "../components/NavigationButton.vue";
 import MainTab from "../components/MainTab.vue";
-import { computed, reactive, ref } from "vue";
+import { reactive, ref } from "vue";
 
 // API
 const bookSearchList = reactive([]);
 const bookSearch = ref("");
+const authorSearch = ref("");
+
 const getData = async () => {
     if (bookSearchList.length > 0) {
         bookSearchList.splice(0, bookSearchList.length);
     }
 
-    const response = await fetch(
-        `https://www.googleapis.com/books/v1/volumes?q=intitle:${bookSearch.value}`
-    );
+    let response;
+
+    if (bookSearch.value !== "" && authorSearch.value !== "") {
+        response = await fetch(
+            `https://www.googleapis.com/books/v1/volumes?q=${bookSearch.value}+inauthor:${authorSearch.value}`
+        );
+    } else if (bookSearch.value !== "" && authorSearch.value === "") {
+        response = await fetch(
+            `https://www.googleapis.com/books/v1/volumes?q=${bookSearch.value}`
+        );
+    } else if (bookSearch.value === "" && authorSearch.value !== "") {
+        response = await fetch(
+            `https://www.googleapis.com/books/v1/volumes?q=inauthor:${authorSearch.value}`
+        );
+    }
+
     const data = await response.json();
     data.items.forEach((item) => {
         bookSearchList.push(item);
@@ -100,7 +119,7 @@ const searchBook = () => {
     width: 100%;
     padding: var(--padding-panel);
 
-    gap: 4rem;
+    gap: 2rem;
 
     border-bottom: 2px solid var(--color-primary);
     box-shadow: var(--shadow);
@@ -118,7 +137,7 @@ const searchBook = () => {
 
 input {
     width: 100%;
-
+    padding: 0 1rem;
     font-size: 1.8rem;
 
     box-shadow: inset 0 0 2px grey;
