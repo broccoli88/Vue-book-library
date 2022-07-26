@@ -41,10 +41,12 @@
 
         <main class="main-panel">
             <MainTab
+                @show-details="showDetails"
                 :book="book"
                 v-for="book in bookSearchList"
                 :key="book.id"
             ></MainTab>
+            <BookDetails v-if="isDetails" @close-details="hideDetails" />
         </main>
 
         <!-- FOOTER -->
@@ -60,6 +62,7 @@
 import SearchButton from "../components/SearchButton.vue";
 import NavigationButton from "../components/NavigationButton.vue";
 import MainTab from "../components/MainTab.vue";
+import BookDetails from "../components/BookDetails.vue";
 import { reactive, ref } from "vue";
 
 // API
@@ -96,6 +99,20 @@ const getData = async () => {
 
 const searchBook = () => {
     getData();
+};
+
+// Book Details
+
+const props = defineProps(["book"]);
+const bookInfo = props.book;
+
+const isDetails = ref(true);
+const showDetails = (book) => {
+    isDetails.value = true;
+};
+
+const hideDetails = () => {
+    isDetails.value = false;
 };
 </script>
 
@@ -160,6 +177,7 @@ input {
 
 .main-panel {
     grid-area: main;
+    position: relative;
 }
 
 .footer-panel {

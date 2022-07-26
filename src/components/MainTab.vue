@@ -16,21 +16,33 @@
             {{ bookDescription }} ...
         </p>
 
-        <button class="details">Details</button>
+        <button @click="details" class="details">Details</button>
     </div>
 </template>
 <script setup>
 import { computed } from "@vue/reactivity";
 import { reactive } from "vue";
 
+// Props
+
 const props = defineProps(["book"]);
 const bookInfo = reactive(props.book.volumeInfo);
 const bookPriceInfo = reactive(props.book.saleInfo);
+
+// Emits
+
+const emits = defineEmits(["show-details"]);
 
 const bookDescription = computed(() => {
     if (!bookInfo.description) return;
     return bookInfo.description.substring(0, 455);
 });
+
+// Show Details
+
+const details = () => {
+    emits("show-details", props.book);
+};
 </script>
 <style scoped>
 .main-tab {
